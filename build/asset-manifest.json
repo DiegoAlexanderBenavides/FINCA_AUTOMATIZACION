@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/FINCA_AUTOMATIZACION/static/css/main.0e98fee4.css",
-    "main.js": "/FINCA_AUTOMATIZACION/static/js/main.779c32cd.js",
+    "main.js": "/FINCA_AUTOMATIZACION/static/js/main.50332f22.js",
     "index.html": "/FINCA_AUTOMATIZACION/index.html",
     "main.0e98fee4.css.map": "/FINCA_AUTOMATIZACION/static/css/main.0e98fee4.css.map",
-    "main.779c32cd.js.map": "/FINCA_AUTOMATIZACION/static/js/main.779c32cd.js.map"
+    "main.50332f22.js.map": "/FINCA_AUTOMATIZACION/static/js/main.50332f22.js.map"
   },
   "entrypoints": [
     "static/css/main.0e98fee4.css",
-    "static/js/main.779c32cd.js"
+    "static/js/main.50332f22.js"
   ]
 }

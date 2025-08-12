@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { database, ref, set } from "./firebase"; // ✅ Importación correcta
-
+import React, { useState, useEffect } from 'react';
+import { database, ref, set } from "./firebase";
+import { onValue } from "firebase/database"; // ✅ Importar onValue para lectura en tiempo real
 
 import DashboardButton from './components/DashboardButton';
 import DashboardLayout from './components/DashboardLayout';
@@ -17,6 +17,24 @@ const App = () => {
     flowSensorStatus: true,
     waterLevel: 75,
   });
+
+  // ✅ Escuchar cambios en sensor1 desde Firebase
+  useEffect(() => {
+    const sensorRef = ref(database, 'sensor1');
+    const unsubscribe = onValue(sensorRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const value = snapshot.val();
+        console.log("Temperatura recibida:", value);
+
+        setRealtimeData(prev => ({
+          ...prev,
+          temperature: value // ✅ Actualiza solo la temperatura
+        }));
+      }
+    });
+
+    return () => unsubscribe(); // 🔹 Limpieza al desmontar
+  }, []);
 
   const handleButtonClick = (action = '') => {
     let path = '';
@@ -51,7 +69,6 @@ const App = () => {
     set(ref(database, path), newValue)
       .then(() => {
         setStatusMessage(`Comando enviado: ${action}`);
-        console.log(`Firebase actualizado: ${path} = ${newValue}`);
       })
       .catch((error) => {
         console.error('Error al escribir en Firebase:', error);
@@ -92,6 +109,7 @@ const App = () => {
         onChange={handleSliderChange} 
       />
 
+      {/* 🔹 Aquí se mostrará temperatura actualizada desde Firebase */}
       <DashboardPanel data={realtimeData} />
 
       <DashboardValveControl valveId={1} onActivate={handleValveActivate} onDeactivate={handleValveDeactivate} />
