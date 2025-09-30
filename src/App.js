@@ -10,7 +10,7 @@ import DashboardPanel from './components/DashboardPanel';
 import DashboardValveControl from './components/DashboardValveControl';
 
 const App = () => {
-  const [irrigationLevel, setIrrigationLevel] = useState(50);
+  const [irrigationLevel, setIrrigationLevel] = useState(0);
   const [puertaLevel, setPuertaLevel] = useState(0); // ✅ Nuevo estado para puerta
   const [statusMessage, setStatusMessage] = useState('Esperando comandos...');
   const [realtimeData, setRealtimeData] = useState({
@@ -91,7 +91,7 @@ const App = () => {
     setPuertaLevel(porcentaje);
 
     // Conversión a 0–180 grados
-    const grados = Math.round((porcentaje / 100) * 92);
+    const grados = Math.round((porcentaje / 100) * 95);
 
     setStatusMessage(`Puerta ajustada a: ${grados}°`);
     set(ref(database, 'puerta'), grados);
