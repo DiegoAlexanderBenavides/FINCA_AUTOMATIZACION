@@ -5,11 +5,13 @@ import { onValue } from "firebase/database"; // ✅ Importar onValue para lectur
 import DashboardButton from './components/DashboardButton';
 import DashboardLayout from './components/DashboardLayout';
 import DashboardSlider from './components/DashboardSlider';
+import DashboardSliderPuerta from './components/DashboardSliderPuerta'; // ✅ Nuevo componente
 import DashboardPanel from './components/DashboardPanel';
 import DashboardValveControl from './components/DashboardValveControl';
 
 const App = () => {
   const [irrigationLevel, setIrrigationLevel] = useState(50);
+  const [puertaLevel, setPuertaLevel] = useState(0); // ✅ Nuevo estado para puerta
   const [statusMessage, setStatusMessage] = useState('Esperando comandos...');
   const [realtimeData, setRealtimeData] = useState({
     temperature: 25.5,
@@ -83,6 +85,18 @@ const App = () => {
     set(ref(database, 'devices/irrigationLevel'), newValue);
   };
 
+  // ✅ Nuevo handler para la puerta
+  const handlePuertaChange = (event) => {
+    const porcentaje = parseInt(event.target.value);
+    setPuertaLevel(porcentaje);
+
+    // Conversión a 0–180 grados
+    const grados = Math.round((porcentaje / 100) * 92);
+
+    setStatusMessage(`Puerta ajustada a: ${grados}°`);
+    set(ref(database, 'puerta'), grados);
+  };
+
   const handleValveActivate = (valveId = 0) => {
     setStatusMessage(`Válvula ${valveId} activada.`);
     set(ref(database, `valves/${valveId}`), 1);
@@ -107,6 +121,13 @@ const App = () => {
         label="Nivel de Riego General" 
         value={irrigationLevel} 
         onChange={handleSliderChange} 
+      />
+
+      {/* ✅ Nuevo slider para la puerta */}
+      <DashboardSliderPuerta 
+        label="Posición de la Puerta" 
+        value={puertaLevel} 
+        onChange={handlePuertaChange} 
       />
 
       {/* 🔹 Aquí se mostrará temperatura actualizada desde Firebase */}
